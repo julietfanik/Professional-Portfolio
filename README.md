@@ -378,8 +378,10 @@ Expected Completion: June 2026
 
 ---
 
-# 👤 Author
+## 👤 Author
+
 Juliet Fanik  
-GitHub: https://github.com/julietfanik  
-LinkedIn: https://www.linkedin.com/in/juliet-fanik-9a0594140/
-Resume: ![Juliet Fayez Fanik Resume](juliet-fayez-fanik-resume.pdf)
+
+- GitHub: https://github.com/julietfanik  
+- LinkedIn: https://www.linkedin.com/in/juliet-fanik-9a0594140/  
+- Resume: [Juliet Fayez Fanik Resume](resume.pdf)
