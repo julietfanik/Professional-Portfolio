@@ -1,1 +1,384 @@
 # Professional-Portfolio
+# AWS Cloud Portfolio
+
+## 👤 About Me
+I am Juliet Fanik, an aspiring Cloud Engineer currently building hands-on experience with AWS infrastructure, including scalable architectures and Infrastructure-as-Code (IaC).  
+
+I am currently pursuing the AWS Solutions Architect Associate certification and actively building real-world AWS projects to strengthen cloud engineering skills.
+
+---
+
+# ☁️ Overview
+
+This portfolio showcases two AWS cloud projects demonstrating:
+- Scalable architecture design
+- High availability and fault tolerance
+- Infrastructure-as-Code (CloudFormation)
+- Monitoring and alerting with CloudWatch and SNS
+
+---
+
+# 🚀 Project 1: Highly Available AWS Architecture (Console Deployment)
+
+## 📌 Overview
+Designed and deployed a highly available AWS architecture using EC2, Application Load Balancer, and Auto Scaling Groups across multiple Availability Zones.
+
+---
+
+## 🧱 Architecture Components
+- EC2 instances in us-east-1a and us-east-1b
+- Application Load Balancer (ALB)
+- Auto Scaling Group with CPU-based scaling
+- VPC with subnets, route tables, and security groups
+- CloudWatch monitoring
+- SNS notifications for alerts
+
+---
+
+## ⚙️ Key Features
+- Auto Scaling policy: Automatically scales EC2 instances to maintain ~50% average CPU utilization 
+- Health checks configured via ALB target groups  
+- Simulated failure testing using unhealthy instance state  
+- EC2 user data script displays AZ-specific message:
+  - “Hello Juliet from AZ-A / AZ-B”
+  
+---
+## Debugging Console Deployment Issues
+- EC2 instance accecable via public IP: Created an updated version of the lauch template with the EC2 instances ONLY allowing traffic from the ALB.
+---
+
+## 📸 Screenshots
+
+### Application Load Balancer (ALB)
+![Application Load Balancer](application-load-balancer.png)
+
+### ALB Details
+![ALB Details](alb-details.png)
+
+### ALB Target Groups
+![Target Groups](alb-target-groups.png)
+
+### Auto Scaling Group Activity
+![ASG Activity](asg-activity.png)
+
+### Auto Scaling Group Details
+![ASG Details](asg-details-page.png)
+
+### ASG Healthy Instances
+![ASG Healthy Instances](asg-healthy-instances.png)
+
+### Target Tracking Policy
+![ASG Target Tracking Policy](asg-target-tracking-policy.png)
+
+### CloudWatch Alarm
+![CloudWatch Alarm](cloudwatch-health-check-failure.png)
+
+---
+
+## 🧠 What I Learned
+- How ALB distributes traffic across multiple AZs
+- How Auto Scaling reacts to CPU-based metrics
+- How CloudWatch + SNS enable observability and alerting
+- How to design fault-tolerant AWS architectures
+
+---
+
+# 🏗️ Project 2: Infrastructure as Code (CloudFormation)
+
+## 📌 Overview
+This project builds upon the console-based deployment in Project 1 by implementing Infrastructure-as-Code to ensure repeatable, version-controlled infrastructure provisioning.
+
+---
+
+## 🧱 Services Used
+- EC2 Launch Templates
+- Application Load Balancer
+- Auto Scaling Groups
+- VPC (subnets, routing, security groups)
+- CloudWatch Alarms
+- SNS Notifications
+
+---
+
+## ⚙️ Key Features
+- Fully automated multi-AZ deployment using AWS CloudFormation
+- Repeatable Infrastructure-as-Code (IaC) enabling consistent environment provisioning
+- Automated scaling and monitoring using Auto Scaling policies and CloudWatch alarms
+- Implemented and validated end-to-end observability and alerting via SNS notifications
+
+
+---
+
+## 🔧 Issues Resolved During Development
+
+- **Monitoring & Alerting Enhancement:**  
+  Extended CloudWatch alarm coverage beyond CPU utilization by adding an `UnHealthyHostCount > 0` condition. This improved detection of application and instance health failures. Verified alert behavior through controlled health check testing.
+
+- **User Data Script Debugging:**  
+  Resolved formatting and rendering issues in the EC2 user data script affecting the static web page output. Refactored HTML structure and improved command execution for EC2 metadata retrieval using IMDS to ensure accurate instance information display.
+
+---
+
+### CloudFormation Infrastructure Template (YAML)
+
+This template defines the full AWS infrastructure using AWS CloudFormation. It was generated and saved with a `.json` file extension but uses YAML-style syntax with intrinsic functions such as `!Ref`, `!Sub`, and `!GetAtt`.
+It provisions a highly available architecture including the following:
+Application Load Balancer
+Auto Scaling Group
+EC2 instances
+CloudWatch monitoring
+SNS notifications
+
+---
+
+## 🧱 CloudFormation Template
+
+```yaml
+Resources:
+
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: vpc-03f993d95e53dfba0
+      GroupDescription: Allow HTTP Traffic to ALB
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  EC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: vpc-03f993d95e53dfba0
+      GroupDescription: Allow traffic only from ALB
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !Ref ALBSecurityGroup
+
+  LaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        ImageId: ami-0eb38b817b93460ac
+        InstanceType: t3.micro
+        SecurityGroupIds:
+          - !Ref EC2SecurityGroup
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            yum update -y
+            yum install -y httpd
+            systemctl start httpd
+            systemctl enable httpd
+
+            TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" \
+            -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" -s)
+
+            INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" \
+            -s http://169.254.169.254/latest/meta-data/instance-id)
+
+            AZ=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" \
+            -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
+
+            cat <<EOF > /var/www/html/index.html
+            <h1>CloudFormation Deployment Successful</h1>
+            <h3>Instance ID: $INSTANCE_ID</h3>
+            <h3>Availability Zone: $AZ</h3>
+            EOF
+
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      VpcId: vpc-03f993d95e53dfba0
+      TargetType: instance
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckIntervalSeconds: 30
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+
+  ApplicationLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internet-facing
+      Type: application
+      SecurityGroups:
+        - !Ref ALBSecurityGroup
+      Subnets:
+        - subnet-07cd6603c3e713a3c
+        - subnet-009b8ab0f4e293de0
+
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref ApplicationLoadBalancer
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      MinSize: "2"
+      DesiredCapacity: "2"
+      MaxSize: "4"
+      VPCZoneIdentifier:
+        - subnet-07cd6603c3e713a3c
+        - subnet-009b8ab0f4e293de0
+      TargetGroupARNs:
+        - !Ref TargetGroup
+      LaunchTemplate:
+        LaunchTemplateId: !Ref LaunchTemplate
+        Version: !GetAtt LaunchTemplate.LatestVersionNumber
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 120
+
+  TargetTrackingScalingPolicy:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AutoScalingGroupName: !Ref AutoScalingGroup
+      PolicyType: TargetTrackingScaling
+      TargetTrackingConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ASGAverageCPUUtilization
+        TargetValue: 50
+
+  SNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: asg-alerts
+
+  CPUAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: High CPU on ASG instances
+      Namespace: AWS/AutoScaling
+      MetricName: GroupAverageCPUUtilization
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 70
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: !Ref AutoScalingGroup
+      AlarmActions:
+        - !Ref SNSTopic
+
+  UnhealthyHostAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: ALB target group has unhealthy hosts
+      Namespace: AWS/ApplicationELB
+      MetricName: UnHealthyHostCount
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: TargetGroup
+          Value: !GetAtt TargetGroup.TargetGroupFullName
+        - Name: LoadBalancer
+          Value: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
+      AlarmActions:
+        - !Ref SNSTopic
+
+  SNSSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: email
+      Endpoint: your-email@example.com
+      TopicArn: !Ref SNSTopic
+```
+
+## 📸 Screenshots  
+	  
+### CloudFormation Stack Creation Complete
+![Stack Creation Complete](cloudformation-stack-creation-complete.png)
+
+### Infrastructure Composer
+![Infrastructure Composer](cloudformation-infrastructure-composer.png)
+
+### Auto Scaling Group Overview
+![ASG Overview](cloudformation-asg-overview.png)
+
+### Auto Scaling Group Instance Management
+![ASG Instance Management](cloudformation-asg-instance-management.png)
+
+### Auto Scaling Instance Termination Activity
+![ASG Termination Activity](cloudformation-autoscaling-instance-termination.png)
+
+### EC2 Instance Summary
+![Instance Summary](cloudformation-instance-summary.png)
+
+### EC2 Security Group Rules
+![Security Group Rules](cloudformation-ec2-security-group-rule.png)
+
+### Launch Template
+![Launch Template](cloudformation-launch-template.png)
+
+### Application Load Balancer (ALB)
+![ALB Working](cloudformation-alb-working.png)
+
+### ALB Overview Page
+![ALB Overview](cloudformation-alb-overview-page.png)
+
+### Target Group Overview
+![Target Group Overview](cloudformation-target-group-overview.png)
+
+### Target Group Monitoring
+![Target Group Monitoring](cloudformation-targetgroup-monitoring.png)
+
+### Health Check Failure Trigger
+![Health Check Failure Trigger](cloudformation-health-check-failure-trigger.png)
+
+### Unhealthy Targets
+![Unhealthy Targets](cloudformation-unhealthy-targets.png)
+
+### CloudWatch Unhealthy Host Alarm
+![CloudWatch Alarm](cloudformation-cloudwatch-unhealthyhost.png)
+
+### SNS Email Notification
+![SNS Email Notification](cloudformation-sns-email.png)
+
+---
+
+## 🧠 What I Learned
+- How AWS resource dependencies work in IaC
+- How to debug CloudFormation stack failures
+- How to design repeatable infrastructure deployments
+- Difference between manual vs automated infrastructure provisioning
+
+---
+
+# 🧰 Skills Demonstrated
+
+- AWS Cloud Architecture Design
+- High Availability & Fault Tolerance
+- Auto Scaling & Load Balancing
+- Infrastructure as Code (CloudFormation)
+- Cloud Monitoring (CloudWatch)
+- Alerting Systems (SNS)
+- VPC Networking Design
+- Debugging AWS Deployment Issues
+
+---
+
+# 📎 Certification
+AWS Certified Solutions Architect Associate (In Progress)  
+Expected Completion: June 2026
+
+---
+
+# 👤 Author
+Juliet Fanik  
+GitHub: https://github.com/julietfanik  
+LinkedIn: https://www.linkedin.com/in/juliet-fanik-9a0594140/
