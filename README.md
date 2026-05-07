@@ -1,14 +1,13 @@
 # Professional-Portfolio
 # AWS Cloud Portfolio
 
-## 👤 About Me
-I am Juliet Fanik, an aspiring Cloud Engineer currently building hands-on experience with AWS infrastructure, including scalable architectures and Infrastructure-as-Code (IaC).  
-
-I am currently pursuing the AWS Solutions Architect Associate certification and actively building real-world AWS projects to strengthen cloud engineering skills.
+# 👤 About Me
+- I am Juliet Fanik, an aspiring Cloud Engineer currently building hands-on experience with AWS infrastructure, including scalable architectures and Infrastructure-as-Code (IaC).  
+- I am currently pursuing the AWS Solutions Architect Associate certification and actively building real-world AWS projects to strengthen cloud engineering skills.
 
 ---
 
-# ☁️ Overview
+# Overview
 
 This portfolio showcases two AWS cloud projects demonstrating:
 - Scalable architecture design
@@ -20,12 +19,12 @@ This portfolio showcases two AWS cloud projects demonstrating:
 
 # 🚀 Project 1: Highly Available AWS Architecture (Console Deployment)
 
-## 📌 Overview
-Designed and deployed a highly available AWS architecture using EC2, Application Load Balancer, and Auto Scaling Groups across multiple Availability Zones.
+## Overview
+I have this designed this architecture to showcase my ability to build and deploy a highly available AWS architecture using EC2, Application Load Balancer, and Auto Scaling Groups across multiple Availability Zones.
 
 ---
 
-## 🧱 Architecture Components
+## Architecture Components
 - EC2 instances in us-east-1a and us-east-1b
 - Application Load Balancer (ALB)
 - Auto Scaling Group with CPU-based scaling
@@ -35,7 +34,7 @@ Designed and deployed a highly available AWS architecture using EC2, Application
 
 ---
 
-## ⚙️ Key Features
+## Key Features
 - Auto Scaling policy: Automatically scales EC2 instances to maintain ~50% average CPU utilization 
 - Health checks configured via ALB target groups  
 - Simulated failure testing using unhealthy instance state  
@@ -44,10 +43,11 @@ Designed and deployed a highly available AWS architecture using EC2, Application
   
 ---
 ## Debugging Console Deployment Issues
-- EC2 instance accecable via public IP: Created an updated version of the lauch template with the EC2 instances ONLY allowing traffic from the ALB.
+- EC2 instance accecable via public IP: Created an updated version of the launch template with the EC2 instances ONLY allowing traffic from the ALB.
+
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 ### Application Load Balancer (ALB)
 ![Application Load Balancer](application-load-balancer.png)
@@ -75,7 +75,7 @@ Designed and deployed a highly available AWS architecture using EC2, Application
 
 ---
 
-## 🧠 What I Learned
+## What I Learned
 - How ALB distributes traffic across multiple AZs
 - How Auto Scaling reacts to CPU-based metrics
 - How CloudWatch + SNS enable observability and alerting
@@ -83,14 +83,14 @@ Designed and deployed a highly available AWS architecture using EC2, Application
 
 ---
 
-# 🏗️ Project 2: Infrastructure as Code (CloudFormation)
+# 🚀 Project 2: Infrastructure as Code (CloudFormation)
 
-## 📌 Overview
+## Overview
 This project builds upon the console-based deployment in Project 1 by implementing Infrastructure-as-Code to ensure repeatable, version-controlled infrastructure provisioning.
 
 ---
 
-## 🧱 Services Used
+## Services Used
 - EC2 Launch Templates
 - Application Load Balancer
 - Auto Scaling Groups
@@ -100,7 +100,7 @@ This project builds upon the console-based deployment in Project 1 by implementi
 
 ---
 
-## ⚙️ Key Features
+## Key Features
 - Fully automated multi-AZ deployment using AWS CloudFormation
 - Repeatable Infrastructure-as-Code (IaC) enabling consistent environment provisioning
 - Automated scaling and monitoring using Auto Scaling policies and CloudWatch alarms
@@ -109,7 +109,7 @@ This project builds upon the console-based deployment in Project 1 by implementi
 
 ---
 
-## 🔧 Issues Resolved During Development
+## Issues Resolved During Development
 
 - **Monitoring & Alerting Enhancement:**  
   Extended CloudWatch alarm coverage beyond CPU utilization by adding an `UnHealthyHostCount > 0` condition. This improved detection of application and instance health failures. Verified alert behavior through controlled health check testing.
@@ -131,7 +131,7 @@ SNS notifications
 
 ---
 
-## 🧱 CloudFormation Template
+## CloudFormation Template
 
 ```yaml
 Resources:
@@ -302,6 +302,7 @@ Resources:
 ## 📸 Screenshots  
 	  
 ### CloudFormation Stack Creation Complete
+#### This shows my the success of my created stack resources
 ![Stack Creation Complete](cloudformation-stack-creation-complete.png)
 
 ### Infrastructure Composer
@@ -351,7 +352,7 @@ Resources:
 
 ---
 
-## 🧠 What I Learned
+## What I Learned
 - How AWS resource dependencies work in IaC
 - How to debug CloudFormation stack failures
 - How to design repeatable infrastructure deployments
@@ -359,7 +360,7 @@ Resources:
 
 ---
 
-# 🧰 Skills Demonstrated
+# Skills Demonstrated
 
 - AWS Cloud Architecture Design
 - High Availability & Fault Tolerance
@@ -372,7 +373,7 @@ Resources:
 
 ---
 
-# 📎 Certification
+# Certification
 AWS Certified Solutions Architect Associate (In Progress)  
 Expected Completion: June 2026
 
