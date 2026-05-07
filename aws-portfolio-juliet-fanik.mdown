@@ -49,28 +49,28 @@ Designed and deployed a highly available AWS architecture using EC2, Application
 ## 📸 Screenshots
 
 ### Application Load Balancer (ALB)
-![Application Load Balancer](screenshots/application-load-balancer.png)
+![Application Load Balancer](application-load-balancer.png)
 
 ### ALB Details
-![ALB Details](screenshots/alb-details.png)
+![ALB Details](alb-details.png)
 
 ### ALB Target Groups
-![Target Groups](screenshots/alb-target-groups.png)
+![Target Groups](alb-target-groups.png)
 
 ### Auto Scaling Group Activity
-![ASG Activity](screenshots/asg-activity.png)
+![ASG Activity](asg-activity.png)
 
 ### Auto Scaling Group Details
-![ASG Details](screenshots/asg-details-page.png)
+![ASG Details](asg-details-page.png)
 
 ### ASG Healthy Instances
-![ASG Healthy Instances](screenshots/asg-healthy-instances.png)
+![ASG Healthy Instances](asg-healthy-instances.png)
 
 ### Target Tracking Policy
-![ASG Target Tracking Policy](screenshots/asg-target-tracking-policy.png)
+![ASG Target Tracking Policy](asg-target-tracking-policy.png)
 
 ### CloudWatch Alarm
-![CloudWatch Alarm](screenshots/cloudwatch-health-check-failure.png)
+![CloudWatch Alarm](cloudwatch-health-check-failure.png)
 
 ---
 
@@ -301,52 +301,52 @@ Resources:
 ## 📸 Screenshots  
 	  
 ### CloudFormation Stack Creation Complete
-![Stack Creation Complete](screenshots/cloudformation-stack-creation-complete.png)
+![Stack Creation Complete](cloudformation-stack-creation-complete.png)
 
 ### Infrastructure Composer
-![Infrastructure Composer](screenshots/cloudformation-infrastructure-composer.png)
+![Infrastructure Composer](cloudformation-infrastructure-composer.png)
 
 ### Auto Scaling Group Overview
-![ASG Overview](screenshots/cloudformation-asg-overview.png)
+![ASG Overview](cloudformation-asg-overview.png)
 
 ### Auto Scaling Group Instance Management
-![ASG Instance Management](screenshots/cloudformation-asg-instance-management.png)
+![ASG Instance Management](cloudformation-asg-instance-management.png)
 
 ### Auto Scaling Instance Termination Activity
-![ASG Termination Activity](screenshots/cloudformation-autoscaling-instance-termination.png)
+![ASG Termination Activity](cloudformation-autoscaling-instance-termination.png)
 
 ### EC2 Instance Summary
-![Instance Summary](screenshots/cloudformation-instance-summary.png)
+![Instance Summary](cloudformation-instance-summary.png)
 
 ### EC2 Security Group Rules
-![Security Group Rules](screenshots/cloudformation-ec2-security-group-rule.png)
+![Security Group Rules](cloudformation-ec2-security-group-rule.png)
 
 ### Launch Template
-![Launch Template](screenshots/cloudformation-launch-template.png)
+![Launch Template](cloudformation-launch-template.png)
 
 ### Application Load Balancer (ALB)
-![ALB Working](screenshots/cloudformation-alb-working.png)
+![ALB Working](cloudformation-alb-working.png)
 
 ### ALB Overview Page
-![ALB Overview](screenshots/cloudformation-alb-overview-page.png)
+![ALB Overview](cloudformation-alb-overview-page.png)
 
 ### Target Group Overview
-![Target Group Overview](screenshots/cloudformation-target-group-overview.png)
+![Target Group Overview](cloudformation-target-group-overview.png)
 
 ### Target Group Monitoring
-![Target Group Monitoring](screenshots/cloudformation-targetgroup-monitoring.png)
+![Target Group Monitoring](cloudformation-targetgroup-monitoring.png)
 
 ### Health Check Failure Trigger
-![Health Check Failure Trigger](screenshots/cloudformation-health-check-failure-trigger.png)
+![Health Check Failure Trigger](cloudformation-health-check-failure-trigger.png)
 
 ### Unhealthy Targets
-![Unhealthy Targets](screenshots/cloudformation-unhealthy-targets.png)
+![Unhealthy Targets](cloudformation-unhealthy-targets.png)
 
 ### CloudWatch Unhealthy Host Alarm
-![CloudWatch Alarm](screenshots/cloudformation-cloudwatch-unhealthyhost.png)
+![CloudWatch Alarm](cloudformation-cloudwatch-unhealthyhost.png)
 
 ### SNS Email Notification
-![SNS Email Notification](screenshots/cloudformation-sns-email.png)
+![SNS Email Notification](cloudformation-sns-email.png)
 
 ---
 
