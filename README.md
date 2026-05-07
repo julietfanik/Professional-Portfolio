@@ -302,20 +302,24 @@ Resources:
 ## 📸 Screenshots  
 	  
 ### CloudFormation Stack Creation Complete
-#### This shows my the success of my created stack resources
 ![Stack Creation Complete](cloudformation-stack-creation-complete.png)
+#### This shows the successful creation of my stack resources
 
 ### Infrastructure Composer
 ![Infrastructure Composer](cloudformation-infrastructure-composer.png)
+#### The architecture of the cloudformation code
 
 ### Auto Scaling Group Overview
 ![ASG Overview](cloudformation-asg-overview.png)
+#### Details of my auto scaling group
 
 ### Auto Scaling Group Instance Management
 ![ASG Instance Management](cloudformation-asg-instance-management.png)
+#### Both healthy instances shown in my autoscaling group depoloyed in two different area zones
 
 ### Auto Scaling Instance Termination Activity
 ![ASG Termination Activity](cloudformation-autoscaling-instance-termination.png)
+#### Successful autoscaling behavior after instance was manually terminated
 
 ### EC2 Instance Summary
 ![Instance Summary](cloudformation-instance-summary.png)
