@@ -8,7 +8,7 @@
 
 ## Overview
 
-This portfolio showcases two AWS cloud projects demonstrating:
+This portfolio includes two AWS projects that focus on building and automating cloud infrastructure. Together, they demonstrate:
 - Scalable architecture design
 - High availability and fault tolerance
 - Infrastructure-as-Code (CloudFormation)
@@ -19,7 +19,7 @@ This portfolio showcases two AWS cloud projects demonstrating:
 # 🚀 Project 1: Highly Available AWS Architecture (Console Deployment)
 
 ## Overview
-I designed and deployed this architecture to demonstrate a highly available AWS architecture using EC2, Application Load Balancer, and Auto Scaling Groups across multiple Availability Zones.
+I designed and deployed a multi-AZ AWS architecture using EC2, an Application Load Balancer, and Auto Scaling Groups to ensure high availability and fault tolerance.
 
 ---
 
@@ -42,8 +42,8 @@ I designed and deployed this architecture to demonstrate a highly available AWS 
   
 ---
 ## Issues Resolved
-- Fixed public EC2 instance exposure by updating the Launch Template security configuration to restrict inbound traffic to only allow access from the Application Load Balancer (ALB).
-  
+- Restricted EC2 access by updating security groups to allow traffic only from the Application Load Balancer
+- Fixed initial public exposure issue caused by overly permissive inbound rules  
 ---
 
 ## Screenshots
@@ -55,52 +55,51 @@ I designed and deployed this architecture to demonstrate a highly available AWS 
 
 ### ALB Details
 ![ALB Details](alb-details.png)
-#### The ALB overview page displays key configuration details, including the VPC, subnet IDs, internet-facing scheme, and the associated target group used for routing traffic to backend instances.
+#### Shows configuration including VPC, subnets, and target group association.
 
 ---
 
 ### ALB Target Groups
 ![Target Groups](alb-target-groups.png)
-#### The target group shows two healthy registered EC2 instances.
+#### Both EC2 instances registered and reporting healthy status.
 
 ---
 
 ### Auto Scaling Group Details
 ![ASG Details](asg-details-page.png)
-#### The Auto Scaling Group overview displays scaling configuration, launch template details, and associated subnets, which align with the ALB subnet configuration.
-
+#### Displays scaling configuration, launch template, and subnet placement.
 ---
 
 ### Target Tracking Policy
 ![ASG Target Tracking Policy](asg-target-tracking-policy.png)
-#### The scaling policy is configured using Target Tracking to maintain average CPU utilization around 50%.
+#### Scaling policy maintains average CPU utilization around 50%.
 
 ---
 
 ### Auto Scaling Group Activity
 ![ASG Activity](asg-activity.png)
-#### The activity log shows successful EC2 instance launches and automatic scaling events triggered when an instance was manually terminated.
+#### Logs show successful scaling events triggered by instance termination tests.
 
 ---
 
 ### CloudWatch Alarm
 ![CloudWatch Alarm](cloudwatch-health-check-failure.png)
-#### This shows the CloudWatch alarm being triggered when the health check path was temporarily changed to `/fake`, and returning to normal when restored to `/`.
+#### Alarm triggered when health check path was changed, then resolved after correction.
 
 ---
 
 ## What I Learned
-- How Application Load Balancers distribute traffic across multiple Availability Zones to improve availability
-- How Auto Scaling Groups respond to CPU usage to automatically scale infrastructure
-- How CloudWatch and SNS work together for monitoring and alerting
-- How to design fault-tolerant AWS architectures using core cloud services
+- How ALBs distribute traffic across multiple Availability Zones
+- How Auto Scaling dynamically adjusts capacity based on demand
+- How CloudWatch and SNS work together for monitoring and alerts
+- How to design fault-tolerant AWS architectures using core services
 
 ---
 
 # 🚀 Project 2: Infrastructure as Code (CloudFormation)
 
 ## Overview
-This project builds upon the console-based deployment in Project 1 by implementing Infrastructure-as-Code to ensure repeatable, version-controlled infrastructure provisioning.
+This project recreates the architecture from Project 1 using AWS CloudFormation to automate infrastructure provisioning and ensure consistent, repeatable deployments.
 
 ---
 
@@ -115,11 +114,10 @@ This project builds upon the console-based deployment in Project 1 by implementi
 ---
 
 ## Key Features
-- Fully automated multi-AZ deployment using AWS CloudFormation  
-- Repeatable Infrastructure-as-Code (IaC) for consistent environment provisioning  
-- Automated scaling and monitoring using Auto Scaling policies and CloudWatch alarms  
-- Implemented end-to-end observability and alerting using SNS notifications  
-
+- Fully automated multi-AZ deployment using CloudFormation
+- Reusable Infrastructure-as-Code template for consistent provisioning
+- Integrated Auto Scaling with ALB for high availability
+- Centralized monitoring and alerting using CloudWatch and SNS
 
 ---
 
@@ -317,79 +315,78 @@ Resources:
 	  
 ### CloudFormation Stack Creation Complete
 ![Stack Creation Complete](cloudformation-stack-creation-complete.png)
-#### Shows the successful creation of the CloudFormation stack resources.
+#### Stack successfully deployed with all resources created.
 
 ---
 
 ### Infrastructure Composer
 ![Infrastructure Composer](cloudformation-infrastructure-composer.png)
-#### Displays the architecture of the deployed CloudFormation stack.
-
+#### Visual representation of deployed architecture.
 ---
 
 ### Auto Scaling Group Overview
 ![ASG Overview](cloudformation-asg-overview.png)
-#### Shows Auto Scaling Group configuration including launch template, capacity, and network settings.
+#### Shows scaling configuration and network setup.
 
 ---
 
 ### Auto Scaling Group Instance Management
 ![ASG Instance Management](cloudformation-asg-instance-management.png)
-#### Shows both healthy EC2 instances running in different Availability Zones.
+#### Two healthy EC2 instances running in different Availability Zones.
 
 ---
 
 ### Auto Scaling Instance Termination Activity
 ![ASG Termination Activity](cloudformation-autoscaling-instance-termination.png)
-#### Demonstrates successful Auto Scaling behavior after an instance was manually terminated.
+#### Successful Auto Scaling behavior after an instance was manually terminated.
 
 ---
 
 ### EC2 Security Group Rules
 ![Security Group Rules](cloudformation-ec2-security-group-rule.png)
-#### Security group configured to allow traffic only from the Application Load Balancer.
+#### Security group restricts traffic to only allow ALB access.
 
 ---
 
 ### Application Load Balancer (ALB)
 ![ALB Working](cloudformation-alb-working.png)
-#### Shows the ALB distributing traffic to two healthy EC2 instances with the deployed user script running successfully.
+#### Successful distribution of traffic to two healthy EC2 instances. User script running successfully.
 
 ---
 
 ### ALB Overview Page
 ![ALB Overview](cloudformation-alb-overview-page.png)
-#### Displays ALB configuration including VPC, subnets, DNS, and associated target group.
+#### ALB configuration and target group association.
 
 ---
 
 ### Target Group Overview
 ![Target Group Overview](cloudformation-target-group-overview.png)
-#### Shows registered instances and their health status within the target group.
+#### Registered instances and their health status within the target group.
 
 ---
 
 ### Health Check Failure Trigger
 ![Health Check Failure Trigger](cloudformation-health-check-failure-trigger.png)
-#### Shows the configuration used to simulate failure by changing the health check path to `/fake`.
+#### Health check path changed to `/fake` to simulate instance failure.
 
 ---
 
 ### Target Group Monitoring
 ![Target Group Monitoring](cloudformation-targetgroup-monitoring.png)
-#### Monitoring graphs show unhealthy host count increasing while healthy hosts drop to zero during failure testing.
+#### Shows unhealthy and healthy host count during failure simulation.
 
 ---
 
 ### CloudWatch Unhealthy Host Alarm
 ![CloudWatch Alarm](cloudformation-cloudwatch-unhealthyhost.png)
-#### CloudWatch alarm triggered when the target group reported unhealthy instances.
+#### Alarm triggered when the target group reported unhealthy instances.
 
 ---
 
 ### SNS Email Notification
 ![SNS Email Notification](cloudformation-sns-email.png)
-#### Shows SNS notification triggered by the CloudWatch alarm indicating unhealthy hosts in the ALB target group.
+#### SNS notification triggered by the CloudWatch alarm.
 ---
 
 ## What I Learned
