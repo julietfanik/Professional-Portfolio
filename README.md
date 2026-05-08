@@ -1,16 +1,14 @@
 # Professional-Portfolio
-# AWS Cloud Portfolio
 
 ## 👤 About Me
-I am Juliet Fanik, an aspiring Cloud Engineer currently building hands-on experience with AWS infrastructure, including scalable architectures and Infrastructure-as-Code (IaC).  
-
-I am currently pursuing the AWS Solutions Architect Associate certification and actively building real-world AWS projects to strengthen cloud engineering skills.
+- I am Juliet Fanik, an aspiring Cloud Engineer currently building hands-on experience with AWS infrastructure, including scalable architectures and Infrastructure-as-Code (IaC).  
+- I am currently pursuing the AWS Solutions Architect Associate certification and actively building real-world AWS projects to strengthen cloud engineering skills.
 
 ---
 
-# ☁️ Overview
+## Overview
 
-This portfolio showcases two AWS cloud projects demonstrating:
+This portfolio includes two AWS projects that focus on building and automating cloud infrastructure. Together, they demonstrate:
 - Scalable architecture design
 - High availability and fault tolerance
 - Infrastructure-as-Code (CloudFormation)
@@ -20,12 +18,12 @@ This portfolio showcases two AWS cloud projects demonstrating:
 
 # 🚀 Project 1: Highly Available AWS Architecture (Console Deployment)
 
-## 📌 Overview
-Designed and deployed a highly available AWS architecture using EC2, Application Load Balancer, and Auto Scaling Groups across multiple Availability Zones.
+## Overview
+I designed and deployed a multi-AZ AWS architecture using EC2, an Application Load Balancer, and Auto Scaling Groups to ensure high availability and fault tolerance.
 
 ---
 
-## 🧱 Architecture Components
+## Architecture Components
 - EC2 instances in us-east-1a and us-east-1b
 - Application Load Balancer (ALB)
 - Auto Scaling Group with CPU-based scaling
@@ -35,7 +33,7 @@ Designed and deployed a highly available AWS architecture using EC2, Application
 
 ---
 
-## ⚙️ Key Features
+## Key Features
 - Auto Scaling policy: Automatically scales EC2 instances to maintain ~50% average CPU utilization 
 - Health checks configured via ALB target groups  
 - Simulated failure testing using unhealthy instance state  
@@ -43,54 +41,69 @@ Designed and deployed a highly available AWS architecture using EC2, Application
   - “Hello Juliet from AZ-A / AZ-B”
   
 ---
-## Debugging Console Deployment Issues
-- EC2 instance accecable via public IP: Created an updated version of the lauch template with the EC2 instances ONLY allowing traffic from the ALB.
+## Issues Resolved
+- Restricted EC2 access by updating security groups to allow traffic only from the Application Load Balancer
+- Fixed initial public exposure issue caused by overly permissive inbound rules  
 ---
 
-## 📸 Screenshots
-
+## Screenshots
 ### Application Load Balancer (ALB)
 ![Application Load Balancer](application-load-balancer.png)
+#### The ALB is successfully routing traffic to both EC2 instances in us-east-1a and us-east-1b.
+
+---
 
 ### ALB Details
 ![ALB Details](alb-details.png)
+#### Shows configuration including VPC, subnets, and target group association.
+
+---
 
 ### ALB Target Groups
 ![Target Groups](alb-target-groups.png)
+#### Both EC2 instances registered and reporting healthy status.
 
-### Auto Scaling Group Activity
-![ASG Activity](asg-activity.png)
+---
 
 ### Auto Scaling Group Details
 ![ASG Details](asg-details-page.png)
-
-### ASG Healthy Instances
-![ASG Healthy Instances](asg-healthy-instances.png)
+#### Displays scaling configuration, launch template, and subnet placement.
+---
 
 ### Target Tracking Policy
 ![ASG Target Tracking Policy](asg-target-tracking-policy.png)
+#### Scaling policy maintains average CPU utilization around 50%.
+
+---
+
+### Auto Scaling Group Activity
+![ASG Activity](asg-activity.png)
+#### Logs show successful scaling events triggered by instance termination tests.
+
+---
 
 ### CloudWatch Alarm
 ![CloudWatch Alarm](cloudwatch-health-check-failure.png)
+#### Alarm triggered when health check path was changed, then resolved after correction.
 
 ---
 
-## 🧠 What I Learned
-- How ALB distributes traffic across multiple AZs
-- How Auto Scaling reacts to CPU-based metrics
-- How CloudWatch + SNS enable observability and alerting
-- How to design fault-tolerant AWS architectures
+## What I Learned
+- How ALBs distribute traffic across multiple Availability Zones
+- How Auto Scaling dynamically adjusts capacity based on demand
+- How CloudWatch and SNS work together for monitoring and alerts
+- How to design fault-tolerant AWS architectures using core services
 
 ---
 
-# 🏗️ Project 2: Infrastructure as Code (CloudFormation)
+# 🚀 Project 2: Infrastructure as Code (CloudFormation)
 
-## 📌 Overview
-This project builds upon the console-based deployment in Project 1 by implementing Infrastructure-as-Code to ensure repeatable, version-controlled infrastructure provisioning.
+## Overview
+This project recreates the architecture from Project 1 using AWS CloudFormation to automate infrastructure provisioning and ensure consistent, repeatable deployments.
 
 ---
 
-## 🧱 Services Used
+## Services Used
 - EC2 Launch Templates
 - Application Load Balancer
 - Auto Scaling Groups
@@ -100,28 +113,27 @@ This project builds upon the console-based deployment in Project 1 by implementi
 
 ---
 
-## ⚙️ Key Features
-- Fully automated multi-AZ deployment using AWS CloudFormation
-- Repeatable Infrastructure-as-Code (IaC) enabling consistent environment provisioning
-- Automated scaling and monitoring using Auto Scaling policies and CloudWatch alarms
-- Implemented and validated end-to-end observability and alerting via SNS notifications
-
+## Key Features
+- Fully automated multi-AZ deployment using CloudFormation
+- Reusable Infrastructure-as-Code template for consistent provisioning
+- Integrated Auto Scaling with ALB for high availability
+- Centralized monitoring and alerting using CloudWatch and SNS
 
 ---
 
-## 🔧 Issues Resolved During Development
+## Issues Resolved During Development
 
 - **Monitoring & Alerting Enhancement:**  
-  Extended CloudWatch alarm coverage beyond CPU utilization by adding an `UnHealthyHostCount > 0` condition. This improved detection of application and instance health failures. Verified alert behavior through controlled health check testing.
+  - Expanded CloudWatch alarms to include `UnHealthyHostCount > 0`, improving detection of instance and application health issues. This was tested using controlled health check failures.
 
 - **User Data Script Debugging:**  
-  Resolved formatting and rendering issues in the EC2 user data script affecting the static web page output. Refactored HTML structure and improved command execution for EC2 metadata retrieval using IMDS to ensure accurate instance information display.
+ - Fixed formatting issues in the EC2 user data script that broke the static web page. Cleaned up the HTML and improved EC2 metadata retrieval using IMDS to show correct instance information.
 
 ---
 
 ### CloudFormation Infrastructure Template (YAML)
 
-This template defines the full AWS infrastructure using AWS CloudFormation. It was generated and saved with a `.json` file extension but uses YAML-style syntax with intrinsic functions such as `!Ref`, `!Sub`, and `!GetAtt`.
+This CloudFormation template defines a highly available AWS architecture using EC2, an Application Load Balancer, Auto Scaling Groups, CloudWatch, and SNS. 
 It provisions a highly available architecture including the following:
 Application Load Balancer
 Auto Scaling Group
@@ -131,7 +143,7 @@ SNS notifications
 
 ---
 
-## 🧱 CloudFormation Template
+## CloudFormation Template
 
 ```yaml
 Resources:
@@ -303,55 +315,81 @@ Resources:
 	  
 ### CloudFormation Stack Creation Complete
 ![Stack Creation Complete](cloudformation-stack-creation-complete.png)
-
-### Infrastructure Composer
-![Infrastructure Composer](cloudformation-infrastructure-composer.png)
-
-### Auto Scaling Group Overview
-![ASG Overview](cloudformation-asg-overview.png)
-
-### Auto Scaling Group Instance Management
-![ASG Instance Management](cloudformation-asg-instance-management.png)
-
-### Auto Scaling Instance Termination Activity
-![ASG Termination Activity](cloudformation-autoscaling-instance-termination.png)
-
-### EC2 Instance Summary
-![Instance Summary](cloudformation-instance-summary.png)
-
-### EC2 Security Group Rules
-![Security Group Rules](cloudformation-ec2-security-group-rule.png)
-
-### Launch Template
-![Launch Template](cloudformation-launch-template.png)
-
-### Application Load Balancer (ALB)
-![ALB Working](cloudformation-alb-working.png)
-
-### ALB Overview Page
-![ALB Overview](cloudformation-alb-overview-page.png)
-
-### Target Group Overview
-![Target Group Overview](cloudformation-target-group-overview.png)
-
-### Target Group Monitoring
-![Target Group Monitoring](cloudformation-targetgroup-monitoring.png)
-
-### Health Check Failure Trigger
-![Health Check Failure Trigger](cloudformation-health-check-failure-trigger.png)
-
-### Unhealthy Targets
-![Unhealthy Targets](cloudformation-unhealthy-targets.png)
-
-### CloudWatch Unhealthy Host Alarm
-![CloudWatch Alarm](cloudformation-cloudwatch-unhealthyhost.png)
-
-### SNS Email Notification
-![SNS Email Notification](cloudformation-sns-email.png)
+#### Stack successfully deployed with all resources created.
 
 ---
 
-## 🧠 What I Learned
+### Infrastructure Composer
+![Infrastructure Composer](cloudformation-infrastructure-composer.png)
+#### Visual representation of deployed architecture.
+---
+
+### Auto Scaling Group Overview
+![ASG Overview](cloudformation-asg-overview.png)
+#### Shows scaling configuration and network setup.
+
+---
+
+### Auto Scaling Group Instance Management
+![ASG Instance Management](cloudformation-asg-instance-management.png)
+#### Two healthy EC2 instances running in different Availability Zones.
+
+---
+
+### Auto Scaling Instance Termination Activity
+![ASG Termination Activity](cloudformation-autoscaling-instance-termination.png)
+#### Successful Auto Scaling behavior after an instance was manually terminated.
+
+---
+
+### EC2 Security Group Rules
+![Security Group Rules](cloudformation-ec2-security-group-rule.png)
+#### Security group restricts traffic to only allow ALB access.
+
+---
+
+### Application Load Balancer (ALB)
+![ALB Working](cloudformation-alb-working.png)
+#### Successful distribution of traffic to two healthy EC2 instances. User script running successfully.
+
+---
+
+### ALB Overview Page
+![ALB Overview](cloudformation-alb-overview-page.png)
+#### ALB configuration and target group association.
+
+---
+
+### Target Group Overview
+![Target Group Overview](cloudformation-target-group-overview.png)
+#### Registered instances and their health status within the target group.
+
+---
+
+### Health Check Failure Trigger
+![Health Check Failure Trigger](cloudformation-health-check-failure-trigger.png)
+#### Health check path changed to `/fake` to simulate instance failure.
+
+---
+
+### Target Group Monitoring
+![Target Group Monitoring](cloudformation-targetgroup-monitoring.png)
+#### Shows unhealthy and healthy host count during failure simulation.
+
+---
+
+### CloudWatch Unhealthy Host Alarm
+![CloudWatch Alarm](cloudformation-cloudwatch-unhealthyhost.png)
+#### Alarm triggered when the target group reported unhealthy instances.
+
+---
+
+### SNS Email Notification
+![SNS Email Notification](cloudformation-sns-email.png)
+#### SNS notification triggered by the CloudWatch alarm.
+---
+
+## What I Learned
 - How AWS resource dependencies work in IaC
 - How to debug CloudFormation stack failures
 - How to design repeatable infrastructure deployments
@@ -359,7 +397,7 @@ Resources:
 
 ---
 
-# 🧰 Skills Demonstrated
+# Skills Demonstrated
 
 - AWS Cloud Architecture Design
 - High Availability & Fault Tolerance
@@ -372,13 +410,16 @@ Resources:
 
 ---
 
-# 📎 Certification
+# Certification
 AWS Certified Solutions Architect Associate (In Progress)  
 Expected Completion: June 2026
 
 ---
 
-# 👤 Author
+## 👤 Author
+
 Juliet Fanik  
-GitHub: https://github.com/julietfanik  
-LinkedIn: https://www.linkedin.com/in/juliet-fanik-9a0594140/
+
+- GitHub: https://github.com/julietfanik  
+- LinkedIn: https://www.linkedin.com/in/juliet-fanik-9a0594140/  
+- Resume: [Juliet Fayez Fanik Resume](juliet-fayez-fanik-resume.pdf)
