@@ -1,10 +1,16 @@
 # Professional-Portfolio
 
 ## 👤 About Me
-- I am Juliet Fanik, an aspiring Cloud Engineer currently building hands-on experience with AWS infrastructure, including scalable architectures and Infrastructure-as-Code (IaC).  
-- I am currently pursuing the AWS Solutions Architect Associate certification and actively building real-world AWS projects to strengthen cloud engineering skills.
+I have built hands-on AWS cloud infrastructure projects focused on scalability, automation, monitoring, and high availability while working toward the AWS Certified Solutions Architect – Associate certification, expected in June 2026. With a bachelor’s degree in Mathematics, I bring a strong analytical mindset and enjoy solving complex technical problems through troubleshooting and infrastructure design. I am passionate about expanding my cloud engineering skills and gaining experience working with real-world AWS environments and infrastructure.
 
 ---
+## 👤 Author
+
+Juliet Fanik  
+
+- GitHub: https://github.com/julietfanik  
+- LinkedIn: https://www.linkedin.com/in/juliet-fanik-9a0594140/  
+- Resume: [Juliet Fayez Fanik Resume](juliet-fayez-fanik-resume.pdf)
 
 ## Overview
 
@@ -417,10 +423,3 @@ Expected Completion: June 2026
 
 ---
 
-## 👤 Author
-
-Juliet Fanik  
-
-- GitHub: https://github.com/julietfanik  
-- LinkedIn: https://www.linkedin.com/in/juliet-fanik-9a0594140/  
-- Resume: [Juliet Fayez Fanik Resume](juliet-fayez-fanik-resume.pdf)
