@@ -1,5 +1,4 @@
 Resources:
-
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -56,7 +55,7 @@ Resources:
             <h3>Instance ID: $INSTANCE_ID</h3>
             <h3>Availability Zone: $AZ</h3>
             EOF
-  
+
   TargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
@@ -69,7 +68,6 @@ Resources:
       HealthCheckIntervalSeconds: 30
       HealthyThresholdCount: 2
       UnhealthyThresholdCount: 2
-
 
   ApplicationLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
@@ -90,7 +88,7 @@ Resources:
       Protocol: HTTP
       DefaultActions:
         - Type: forward
-          TargetGroupArn: !Ref TargetGroup	
+          TargetGroupArn: !Ref TargetGroup
 
   AutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
