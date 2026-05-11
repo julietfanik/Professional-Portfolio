@@ -3,7 +3,6 @@
 ## 👤 About Me
 I have built hands-on AWS cloud infrastructure projects focused on scalability, automation, monitoring, and high availability while working toward the AWS Certified Solutions Architect – Associate certification, expected in June 2026. With a bachelor’s degree in Mathematics, I bring a strong analytical mindset and enjoy solving complex technical problems through troubleshooting and infrastructure design. I am passionate about expanding my cloud engineering skills and gaining experience working with real-world AWS environments and infrastructure.
 
----
 ## 👤 Author
 
 Juliet Fanik  
@@ -30,26 +29,32 @@ I designed and deployed a multi-AZ AWS architecture using EC2, an Application Lo
 ---
 
 ## Architecture Components
-- EC2 instances in us-east-1a and us-east-1b
+- 2 EC2 instances in us-east-1a and us-east-1b
 - Application Load Balancer (ALB)
-- Auto Scaling Group with CPU-based scaling
+- Auto Scaling Group with target tracking to maintain ~50% CPU utilization
 - VPC with subnets, route tables, and security groups
 - CloudWatch monitoring
 - SNS notifications for alerts
 
 ---
 
+## Why This Matters
+- Load balancing improves high availability by distributing traffic across multiple EC2 instances and Availability Zones.
+- Auto Scaling Group with target tracking on CPU keeps performance stable during traffic spikes while avoiding over-provisioning and under-provisioning.
+- CloudWatch alarms integrated with SNS notifications provide real-time monitoring and alerting for application health and infrastructure events.
+
+---
+
 ## Key Features
 - Auto Scaling policy: Automatically scales EC2 instances to maintain ~50% average CPU utilization 
-- Health checks configured via ALB target groups  
-- Simulated failure testing using unhealthy instance state  
-- EC2 user data script displays AZ-specific message:
-  - “Hello Juliet from AZ-A / AZ-B”
+- ALB health checks configured with a 30-second interval to continuously monitor instance health and remove unhealthy targets automatically.
+- Simulated failure testing using unhealthy instance state and restored healthy status within 2 minutes.
+- 1 EC2 user data script displays AZ-specific message:
+- “Hello Juliet from AZ-A / AZ-B”
   
 ---
-## Issues Resolved
-- Restricted EC2 access by updating security groups to allow traffic only from the Application Load Balancer
-- Fixed initial public exposure issue caused by overly permissive inbound rules  
+## Challenges & Solutions
+- Fixed initial public exposure of 2 instances issue caused by overly permissive inbound rules by updating security groups to allow traffic only from the Application Load Balancer.
 ---
 
 ## Screenshots
@@ -109,7 +114,7 @@ This project recreates the architecture from Project 1 using AWS CloudFormation 
 
 ---
 
-## Services Used
+## 6 Services Used
 - EC2 Launch Templates
 - Application Load Balancer
 - Auto Scaling Groups
@@ -124,10 +129,18 @@ This project recreates the architecture from Project 1 using AWS CloudFormation 
 - Reusable Infrastructure-as-Code template for consistent provisioning
 - Integrated Auto Scaling with ALB for high availability
 - Centralized monitoring and alerting using CloudWatch and SNS
-
+  
 ---
 
-## Issues Resolved During Development
+## What Infrastructure as Code Changes Operationally
+- Defines and deploy AWS resources using code instead of manually clicking through the AWS console.
+- Provides a single template that describes the entire infrastructure, making it easier to understand all resources and their relationships.
+- Reviewing infrastructure as code makes it easier to identify configuration mistakes compared to manually setting up resources in the AWS console.
+- Infrastructure as code makes it easier to recreate environments, update infrastructure safely, and manage cloud systems as they grow.
+  
+---
+
+## Challenges & Solutions
 
 - **Monitoring & Alerting Enhancement:**  
   - Expanded CloudWatch alarms to include `UnHealthyHostCount > 0`, improving detection of instance and application health issues. This was tested using controlled health check failures.
@@ -160,163 +173,12 @@ Resources:
     Properties:
       VpcId: vpc-03f993d95e53dfba0
       GroupDescription: Allow HTTP Traffic to ALB
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
-
-  EC2SecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      VpcId: vpc-03f993d95e53dfba0
-      GroupDescription: Allow traffic only from ALB
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          SourceSecurityGroupId: !Ref ALBSecurityGroup
-
-  LaunchTemplate:
-    Type: AWS::EC2::LaunchTemplate
-    Properties:
-      LaunchTemplateData:
-        ImageId: ami-0eb38b817b93460ac
-        InstanceType: t3.micro
-        SecurityGroupIds:
-          - !Ref EC2SecurityGroup
-        UserData:
-          Fn::Base64: !Sub |
-            #!/bin/bash
-            yum update -y
-            yum install -y httpd
-            systemctl start httpd
-            systemctl enable httpd
-
-            TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" \
-            -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" -s)
-
-            INSTANCE_ID=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" \
-            -s http://169.254.169.254/latest/meta-data/instance-id)
-
-            AZ=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" \
-            -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
-
-            cat <<EOF > /var/www/html/index.html
-            <h1>CloudFormation Deployment Successful</h1>
-            <h3>Instance ID: $INSTANCE_ID</h3>
-            <h3>Availability Zone: $AZ</h3>
-            EOF
-
-  TargetGroup:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties:
-      Port: 80
-      Protocol: HTTP
-      VpcId: vpc-03f993d95e53dfba0
-      TargetType: instance
-      HealthCheckPath: /
-      HealthCheckProtocol: HTTP
-      HealthCheckIntervalSeconds: 30
-      HealthyThresholdCount: 2
-      UnhealthyThresholdCount: 2
-
-  ApplicationLoadBalancer:
-    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    Properties:
-      Scheme: internet-facing
-      Type: application
-      SecurityGroups:
-        - !Ref ALBSecurityGroup
-      Subnets:
-        - subnet-07cd6603c3e713a3c
-        - subnet-009b8ab0f4e293de0
-
-  ALBListener:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    Properties:
-      LoadBalancerArn: !Ref ApplicationLoadBalancer
-      Port: 80
-      Protocol: HTTP
-      DefaultActions:
-        - Type: forward
-          TargetGroupArn: !Ref TargetGroup
-
-  AutoScalingGroup:
-    Type: AWS::AutoScaling::AutoScalingGroup
-    Properties:
-      MinSize: "2"
-      DesiredCapacity: "2"
-      MaxSize: "4"
-      VPCZoneIdentifier:
-        - subnet-07cd6603c3e713a3c
-        - subnet-009b8ab0f4e293de0
-      TargetGroupARNs:
-        - !Ref TargetGroup
-      LaunchTemplate:
-        LaunchTemplateId: !Ref LaunchTemplate
-        Version: !GetAtt LaunchTemplate.LatestVersionNumber
-      HealthCheckType: ELB
-      HealthCheckGracePeriod: 120
-
-  TargetTrackingScalingPolicy:
-    Type: AWS::AutoScaling::ScalingPolicy
-    Properties:
-      AutoScalingGroupName: !Ref AutoScalingGroup
-      PolicyType: TargetTrackingScaling
-      TargetTrackingConfiguration:
-        PredefinedMetricSpecification:
-          PredefinedMetricType: ASGAverageCPUUtilization
-        TargetValue: 50
-
-  SNSTopic:
-    Type: AWS::SNS::Topic
-    Properties:
-      TopicName: asg-alerts
-
-  CPUAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: High CPU on ASG instances
-      Namespace: AWS/AutoScaling
-      MetricName: GroupAverageCPUUtilization
-      Statistic: Average
-      Period: 60
-      EvaluationPeriods: 2
-      Threshold: 70
-      ComparisonOperator: GreaterThanThreshold
-      Dimensions:
-        - Name: AutoScalingGroupName
-          Value: !Ref AutoScalingGroup
-      AlarmActions:
-        - !Ref SNSTopic
-
-  UnhealthyHostAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: ALB target group has unhealthy hosts
-      Namespace: AWS/ApplicationELB
-      MetricName: UnHealthyHostCount
-      Statistic: Average
-      Period: 60
-      EvaluationPeriods: 1
-      Threshold: 1
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      Dimensions:
-        - Name: TargetGroup
-          Value: !GetAtt TargetGroup.TargetGroupFullName
-        - Name: LoadBalancer
-          Value: !GetAtt ApplicationLoadBalancer.LoadBalancerFullName
-      AlarmActions:
-        - !Ref SNSTopic
-
-  SNSSubscription:
-    Type: AWS::SNS::Subscription
-    Properties:
-      Protocol: email
-      Endpoint: jffanik@gmail.com
-      TopicArn: !Ref SNSTopic
+...
 ```
+### Full Code
+![Cloudformation Iac](CloudFormation-Iac.yaml)
+
+---
 
 ## 📸 Screenshots  
 	  
@@ -339,7 +201,7 @@ Resources:
 
 ### Auto Scaling Group Instance Management
 ![ASG Instance Management](cloudformation-asg-instance-management.png)
-#### Two healthy EC2 instances running in different Availability Zones.
+#### Two healthy EC2 instances deployed across 2 Availability Zones.
 
 ---
 
@@ -381,13 +243,13 @@ Resources:
 
 ### Target Group Monitoring
 ![Target Group Monitoring](cloudformation-targetgroup-monitoring.png)
-#### Shows unhealthy and healthy host count during failure simulation.
+#### Shows 2 unhealthy and 2 healthy host count during failure simulation.
 
 ---
 
 ### CloudWatch Unhealthy Host Alarm
 ![CloudWatch Alarm](cloudformation-cloudwatch-unhealthyhost.png)
-#### Alarm triggered when the target group reported unhealthy instances.
+#### Alarm triggered when the target group reported 2 unhealthy instances.
 
 ---
 
