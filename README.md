@@ -99,7 +99,7 @@ I designed and deployed a multi-AZ AWS architecture using EC2, an Application Lo
 
 ---
 
-## What I Learned
+## Key Takeaways
 - How ALBs distribute traffic across multiple Availability Zones
 - How Auto Scaling dynamically adjusts capacity based on demand
 - How CloudWatch and SNS work together for monitoring and alerts
@@ -258,7 +258,7 @@ Resources:
 #### SNS notification triggered by the CloudWatch alarm.
 ---
 
-## What I Learned
+## Key Takeaways
 - How AWS resource dependencies work in IaC
 - How to debug CloudFormation stack failures
 - How to design repeatable infrastructure deployments
