@@ -28,6 +28,11 @@ I designed and deployed a multi-AZ AWS architecture using EC2, an Application Lo
 
 ---
 
+### Highly Available and Scalable Web App on AWS
+![AWS Cloud Diagram](highly-available-scalable-architecture.png)
+
+---
+
 ## Architecture Components
 - 2 EC2 instances in us-east-1a and us-east-1b
 - Application Load Balancer (ALB)
